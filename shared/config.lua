@@ -1,0 +1,16 @@
+SzCoreBankingConfig={
+    command='bank',
+    key='F7',
+    allowCommandAnywhere=true,
+    transferLimit=1000000,
+    statementLimit=50,
+    banks={
+        {coords=vec3(149.91,-1040.74,29.37)},
+        {coords=vec3(-1212.98,-330.84,37.78)},
+        {coords=vec3(-2962.58,482.63,15.70)},
+        {coords=vec3(314.19,-278.62,54.17)},
+        {coords=vec3(-351.53,-49.52,49.04)},
+        {coords=vec3(1175.06,2706.64,38.09)},
+        {coords=vec3(246.64,223.20,106.29)}
+    }
+}
