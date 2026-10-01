@@ -1,3 +1,37 @@
+local function registerSzCoreCallback(name, fn)
+    CreateThread(function()
+        local deadline = GetGameTimer() + 15000
+
+        while GetGameTimer() < deadline do
+            if GetResourceState('szcore') == 'started' then
+                local ok, success, err = pcall(function()
+                    return registerSzCoreCallback(name, fn)
+                end)
+
+                if ok and success ~= false then
+                    return
+                end
+
+                if ok and success == false then
+                    print(('[%s] SzCore callback registration rejected: %s (%s)'):format(
+                        GetCurrentResourceName(),
+                        tostring(name),
+                        tostring(err)
+                    ))
+                    return
+                end
+            end
+
+            Wait(100)
+        end
+
+        print(('[%s] SzCore callback registration timed out: %s'):format(
+            GetCurrentResourceName(),
+            tostring(name)
+        ))
+    end)
+end
+
 local B={};local rate={}
 local function player(source)return exports.szcore:GetPlayer(tonumber(source))end
 local function amount(v,max)return exports.szcore:ValidateInteger(v,1,max)end
@@ -49,5 +83,5 @@ local function action(source,action,data)
     return false,'invalid_action'
 end
 exports('TransferPlayerBank',B.transfer);exports('DepositCash',B.deposit);exports('WithdrawCash',B.withdraw);exports('GetStatement',B.statement);exports('GetMyStatement',B.myStatement)
-exports.szcore:CreateCallback('szcore_banking:overview',overview);exports.szcore:CreateCallback('szcore_banking:action',action)
+registerSzCoreCallback('szcore_banking:overview',overview);registerSzCoreCallback('szcore_banking:action',action)
 AddEventHandler('playerDropped',function()rate[source]=nil end)
